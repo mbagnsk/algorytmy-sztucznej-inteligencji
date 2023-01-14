@@ -8,10 +8,10 @@ class ReadData:
     def importData(path):
         coordinates = []
         file = open(path, "r")
-        pointsNumber = file.readline()
+        pointsNumber = int(file.readline())
         rows = file.read().splitlines()
         for row in rows:
             rowElements = row.split()
-            pointCoordinates = Coordinates.Coordinates(rowElements[0], rowElements[1])
+            pointCoordinates = Coordinates.Coordinates(int(rowElements[0]), int(rowElements[1]))
             coordinates.append(pointCoordinates)
         return pointsNumber, coordinates
