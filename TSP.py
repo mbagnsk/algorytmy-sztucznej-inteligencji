@@ -28,6 +28,7 @@ class TSP:
         permutation[self.pointsNumber] = startIndex
         for i in range(1, self.pointsNumber):
             permutation[i] = self.findClosestNeighbour(self.adjacencyMatrix[permutation[i-1]], permutation[i-1], visited)
+        return permutation
 
     def findClosestNeighbour(self, vector, startPoint, visited):
         minLenght = np.max(self.adjacencyMatrix)
@@ -37,7 +38,6 @@ class TSP:
             if not visited[i] and startPoint != i:
                 if minLenght > self.adjacencyMatrix[startPoint][i]:
                     minLenght = self.adjacencyMatrix[startPoint][i]
-
                     closestNeighbour = i
         visited[closestNeighbour] = True
         return closestNeighbour
