@@ -12,14 +12,19 @@ class TabuSearch:
         tabuList.put(bestPermutation)
 
     def generateNeighborhood(self, permutation, option):
-        pass
+        if option == 1:
+            neighborhood = self.generateNeighborhoodByInsert(permutation)
+            #słownik
+        print(neighborhood)
+        return neighborhood
+
 
     def generateNeighborhoodByInsert(self, permutation):
         neighborhood = []
         for i in range(1, len(permutation) - 1):
-            for j in range(i, len(permutation) - 1):
+            for j in range(i + 1, len(permutation) - 1):
                 value = permutation[i]
                 currentPermutation = np.delete(permutation, value, None)
                 currentPermutation = np.insert(currentPermutation, j, value)
-                print(currentPermutation)
-        print(permutation)
+                neighborhood.append(currentPermutation)
+        return neighborhood
