@@ -18,12 +18,13 @@ class TabuSearch:
         bestPermutation = startPermutation
         tabuList = Queue_.Queue(lenghtOfTabu)
         tabuList.put(bestPermutation)
+        tabuList.put([0, 2, 1, 3, 4, 0])
         for _ in range(1):
             neighborhood = self.generateNeighborhood(permutation, option)
             for neighborPermutation in neighborhood:
-                if tabuList.contains(neighborPermutation):
-                    print('tabulist contains element')
-
+                isInTabu, index = tabuList.contains(neighborPermutation)
+                if isInTabu:
+                    tabuList.remove(index)
 
     def generateNeighborhood(self, permutation, option):
         if option == 1:

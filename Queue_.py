@@ -15,7 +15,14 @@ class Queue:
             self.queue.append(value)
 
     def contains(self, item):
+        index = 0
+        isContain = False
         for element in self.queue:
             if np.array_equal(element, item):
-                return True
-        return False
+                isContain = True
+                return isContain, index
+            index += 1
+        return isContain, index
+
+    def remove(self, index):
+        del self.queue[index]
