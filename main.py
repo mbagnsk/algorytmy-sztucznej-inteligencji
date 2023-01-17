@@ -8,7 +8,7 @@ pointsNumber, points = dataReader.importData(path="test data//data.txt")
 
 tsp = TSP.TSP(pointsNumber, points)
 adjacencyMatrix = tsp.getAdjacencyMatrix().copy()
-startIndex = 0
+startIndex = 1
 
 tabu = TabuSearch.TabuSearch(adjacencyMatrix, pointsNumber, startIndex)
 tabu.execute(tabu.firstPermutation, 7, 1)
