@@ -1,3 +1,5 @@
+import numpy as np
+
 class Queue:
     maxSize = 0
     queue = []
@@ -11,3 +13,9 @@ class Queue:
         else:
             self.queue.pop(0)
             self.queue.append(value)
+
+    def contains(self, item):
+        for element in self.queue:
+            if np.array_equal(element, item):
+                return True
+        return False
