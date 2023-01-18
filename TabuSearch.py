@@ -15,13 +15,13 @@ class TabuSearch:
         print(self.firstPermutation)
         print(self.calculateRouteDistance(self.firstPermutation))
 
-    def execute(self, startPermutation, lenghtOfTabu, option):
+    def execute(self, startPermutation, lenghtOfTabu, option, iterationNumber):
         startPermutation = startPermutation.tolist()
         permutation = startPermutation
         localBestPermutation = startPermutation
         tabuList = Queue_.Queue(lenghtOfTabu)
         tabuList.put(localBestPermutation)
-        for _ in range(1000):
+        for _ in range(iterationNumber):
             localBestDistance = 9999999
             neighborhood = self.generateNeighborhood(permutation, option)
             for neighborPermutation in neighborhood:
@@ -48,8 +48,11 @@ class TabuSearch:
     def generateNeighborhood(self, permutation, option):
         if option == 1:
             neighborhood = self.generateNeighborhoodByInsert(permutation)
-            # print(neighborhood)
-            #słownik
+        if option == 2:
+            neighborhood = self.generateNeighborhoodBySwap(permutation)
+        
+        # print(neighborhood)
+        # słownik
         return neighborhood
 
     def generateNeighborhoodByInsert(self, permutation):
@@ -60,6 +63,25 @@ class TabuSearch:
                     value = permutation[i]
                     currentPermutation = np.delete(permutation, i)
                     currentPermutation = np.insert(currentPermutation, j, value)
+                    ifFound = False
+                    for vector in neighborhood:
+                        if np.array_equal(vector, currentPermutation):
+                            ifFound = True
+                    if not ifFound:
+                        neighborhood.append(currentPermutation)
+        return neighborhood
+    
+    def generateNeighborhoodBySwap(self, permutation):
+        neighborhood = []
+        currentPermutation = np.copy(permutation)
+        for i in range(1, len(permutation) - 1):
+            for j in range(1, len(permutation) - 1):
+                if i != j:
+                    currentPermutation = np.copy(permutation)
+                    value = currentPermutation[i]
+                    currentPermutation[i] = currentPermutation[j]
+                    currentPermutation[j] = value
+
                     ifFound = False
                     for vector in neighborhood:
                         if np.array_equal(vector, currentPermutation):
