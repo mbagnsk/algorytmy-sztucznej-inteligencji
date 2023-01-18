@@ -46,13 +46,15 @@ class TabuSearch:
             print(self.bestDistance)
 
     def generateNeighborhood(self, permutation, option):
-        if option == 1:
+        dictionary = {
+            1: "insert",
+            2: "swap"
+        }
+        option = option.lower()
+        if option == dictionary[1]:
             neighborhood = self.generateNeighborhoodByInsert(permutation)
-        if option == 2:
+        if option == dictionary[2]:
             neighborhood = self.generateNeighborhoodBySwap(permutation)
-        
-        # print(neighborhood)
-        # słownik
         return neighborhood
 
     def generateNeighborhoodByInsert(self, permutation):
