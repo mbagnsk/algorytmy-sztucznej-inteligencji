@@ -1,35 +1,40 @@
 import numpy as np
+import random
+import sys
 import Queue_
+import Point
+
 
 class TabuSearch:
     pointsNumber = 0
     firstPermutation = np.zeros(3)
     adjacencyMatrix = np.zeros(3)
-    bestDistance = 9999999
+    bestDistance = sys.maxsize
     bestPerutation = np.zeros(3)
+    startIndex = 0
 
     def __init__(self, adjacencyMatrix, pointsNumber, startIndex):
         self.pointsNumber = pointsNumber
         self.adjacencyMatrix = adjacencyMatrix
-        self.firstPermutation = self.setFirstPermutation(startIndex)
-        print(self.firstPermutation)
-        print(self.calculateRouteDistance(self.firstPermutation))
+        self.startIndex = startIndex
+        self.firstPermutation = self.setFirstPermutation(self.startIndex)
 
-    def execute(self, startPermutation, lenghtOfTabu, option, iterationNumber):
+    def execute(self, startPermutation, lenghtOfTabu, option, iterationNumber, cycleNumberMax, isReactiveTabu):
+        isCycleNumberMaxReached = False
         startPermutation = startPermutation.tolist()
         permutation = startPermutation
         localBestPermutation = startPermutation
         tabuList = Queue_.Queue(lenghtOfTabu)
         tabuList.put(localBestPermutation)
         for _ in range(iterationNumber):
-            localBestDistance = 9999999
+            localBestDistance = sys.maxsize
             neighborhood = self.generateNeighborhood(permutation, option)
             for neighborPermutation in neighborhood:
                 isInTabu, index = tabuList.contains(neighborPermutation)
                 distance = self.calculateRouteDistance(neighborPermutation)
                 if distance < localBestDistance:
                     if isInTabu:
-                        if self.bestDistance > distance:
+                        if self.bestDistance >= distance:
                             localBestDistance = distance
                             localBestPermutation = neighborPermutation
                         else:
@@ -38,12 +43,26 @@ class TabuSearch:
                     else:
                         localBestDistance = distance
                         localBestPermutation = neighborPermutation
-            if localBestDistance < self.bestDistance:
+            bestPermutationChanged = False
+            if localBestDistance <= self.bestDistance:
                 self.bestDistance = localBestDistance
                 self.bestPerutation = localBestPermutation
+                bestPermutationChanged = True
             permutation = localBestPermutation
             tabuList.put(permutation)
-            print(self.bestDistance)
+            if bestPermutationChanged:
+                cycleNumber = 0
+            else:
+                cycleNumber += 1
+
+            if cycleNumber > cycleNumberMax and not isCycleNumberMaxReached:
+                if isReactiveTabu:
+                    permutation = self.generateRandomPermutation(permutation)
+                    cycleNumber = 0
+                    isCycleNumberMaxReached = True
+                else:
+                    return self.bestPerutation
+        return self.bestPerutation
 
     def generateNeighborhood(self, permutation, option):
         dictionary = {
@@ -119,3 +138,7 @@ class TabuSearch:
         for i in range(self.pointsNumber):
             distance += self.adjacencyMatrix[int(permutation[i])][int(permutation[i + 1])]
         return distance
+
+    def generateRandomPermutation(self, permutation):
+        permutation[1 : -1] = np.random.permutation(permutation[1:-1])
+        return permutation
