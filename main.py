@@ -1,16 +1,28 @@
 import ReadData
 import TSP
 import TabuSearch
-import Queue_
 
 dataReader = ReadData.ReadData()
-pointsNumber, points = dataReader.importData(path="test data//data_15.txt")
+pointsNumber, points = dataReader.importData(path="test data//data_30.txt")
 
 tsp = TSP.TSP(pointsNumber, points)
 adjacencyMatrix = tsp.getAdjacencyMatrix().copy()
+
 startIndex = 1
+lengthOfTabu = 7
+option = "insert"
+iterationNumber = 200
+cycleNumberMax = 5
+isReactiveTabu = True
+reactiveInterval = 50
 
 tabu = TabuSearch.TabuSearch(adjacencyMatrix, pointsNumber, startIndex)
-tabu.execute(tabu.firstPermutation, 7, "swap", 50)
-# tabu.execute([0, 1, 2, 3, 4, 0], 7, 1)
-# queue = Queue.Queue(7)
+tabu.execute(tabu.firstPermutation, lengthOfTabu, option, iterationNumber, cycleNumberMax, isReactiveTabu, reactiveInterval)
+
+print("-------------------")
+print("First permutation: " + str(tabu.firstPermutation))
+print("Length of first permutation: " + str(tabu.calculateRouteDistance(tabu.firstPermutation)))
+print("-------------------")
+print("First permutation: " + str(tabu.bestPerutation))
+print("Length of first permutation: " + str(tabu.bestDistance))
+print("-------------------")
