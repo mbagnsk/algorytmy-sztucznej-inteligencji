@@ -23,4 +23,3 @@ class TSP:
 
     def getAdjacencyMatrix(self):
         return self.adjacencyMatrix
-
