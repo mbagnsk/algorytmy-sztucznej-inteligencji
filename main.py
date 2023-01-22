@@ -11,8 +11,8 @@ adjacencyMatrix = tsp.getAdjacencyMatrix().copy()
 startIndex = 1
 lengthOfTabu = 7
 option = "insert"
-iterationNumber = 200
-cycleNumberMax = 5
+iterationNumber = 100
+cycleNumberMax = 10
 isReactiveTabu = True
 reactiveInterval = 50
 
@@ -23,6 +23,6 @@ print("-------------------")
 print("First permutation: " + str(tabu.firstPermutation))
 print("Length of first permutation: " + str(tabu.calculateRouteDistance(tabu.firstPermutation)))
 print("-------------------")
-print("First permutation: " + str(tabu.bestPerutation))
+print("First permutation: " + str(tabu.bestPermutation))
 print("Length of first permutation: " + str(tabu.bestDistance))
 print("-------------------")
