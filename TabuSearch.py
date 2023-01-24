@@ -10,12 +10,15 @@ class TabuSearch:
     bestDistance = sys.maxsize
     bestPermutation = np.zeros(3)
     startIndex = 0
+    bestPermutationHistory = []
+    localBestpermutationHistory = []
+    permutationHistory = []
 
     def __init__(self, adjacencyMatrix, pointsNumber, startIndex):
         self.pointsNumber = pointsNumber
         self.adjacencyMatrix = adjacencyMatrix
         self.startIndex = startIndex
-        self.firstPermutation = self.setFirstPermutation(self.startIndex)
+        self.firstPermutation = self.generateRandomPermutation(self.setFirstPermutation(self.startIndex))
 
     def execute(self, startPermutation, lenghtOfTabu, option, iterationNumber, cycleNumberMax, isReactiveTabu, reactiveInterval):
         isCycleNumberMaxReached = False
@@ -69,6 +72,9 @@ class TabuSearch:
                         intervalIterator = 0
                     else:
                         return self.bestPermutation
+            self.bestPermutationHistory.append(self.bestDistance)
+            self.localBestpermutationHistory.append(localBestDistance)
+            self.permutationHistory.append(self.bestPermutation)
 
         return self.bestPermutation
 
@@ -128,6 +134,8 @@ class TabuSearch:
         for i in range(1, self.pointsNumber):
             permutation[i] = self.findClosestNeighbour(self.adjacencyMatrix[permutation[i-1]], permutation[i-1], visited)
         return permutation
+
+        
 
     def findClosestNeighbour(self, vector, startPoint, visited):
         minLenght = np.max(self.adjacencyMatrix)
