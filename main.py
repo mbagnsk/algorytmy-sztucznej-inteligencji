@@ -13,8 +13,8 @@ adjacencyMatrix = tsp.getAdjacencyMatrix().copy()
 startIndex = 1
 lengthOfTabu = 7
 option = "insert"
-iterationNumber = 200
-cycleNumberMax = 5
+iterationNumber = 100
+cycleNumberMax = 10
 isReactiveTabu = True
 reactiveInterval = 50
 
