@@ -19,8 +19,8 @@ class TabuSearch:
         self.pointsNumber = pointsNumber
         self.adjacencyMatrix = adjacencyMatrix
         self.startIndex = startIndex
-        # self.firstPermutation = self.generateRandomPermutation(self.setFirstPermutation(self.startIndex))
-        self.firstPermutation = self.setFirstPermutation(self.startIndex)
+        self.firstPermutation = self.generateRandomPermutation(self.setFirstPermutation(self.startIndex))
+        # self.firstPermutation = self.setFirstPermutation(self.startIndex)
 
     def execute(self, startPermutation, lenghtOfTabu, option, iterationNumber, cycleNumberMax, isReactiveTabu, reactiveInterval):
         isCycleNumberMaxReached = False
