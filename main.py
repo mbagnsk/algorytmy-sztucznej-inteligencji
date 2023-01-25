@@ -5,14 +5,14 @@ import GIFmaker
 
 
 dataReader = ReadData.ReadData()
-pointsNumber, points = dataReader.importData(path="test data//data_30.txt")
+pointsNumber, points = dataReader.importData(path="test data//data_51.txt")
 
 tsp = TSP.TSP(pointsNumber, points)
 adjacencyMatrix = tsp.getAdjacencyMatrix().copy()
 
 startIndex = 1
 lengthOfTabu = 7
-option = "swap"
+option = "flip"
 iterationNumber = 200
 cycleNumberMax = 5
 isReactiveTabu = True
@@ -33,9 +33,9 @@ print("-------------------")
 # np.savetxt("funkcja_celu_best.txt", tabu.bestPermutationHistory, comments = "", fmt = '%f')
 # np.savetxt("funkcja_celu_local_best.txt", tabu.localBestpermutationHistory, comments = "", fmt = '%f')
 
-pth = option + "\\img_" + str(len(points)) + "\\"
+type_ = "greedy"
 
-GIFmaker.saveAsGIF(tabu, points, pth)
+GIFmaker.saveAsGIF(tabu, points, option, type_)
 
 
 

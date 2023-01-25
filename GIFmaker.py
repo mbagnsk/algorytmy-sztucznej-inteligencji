@@ -2,9 +2,10 @@ import matplotlib.pyplot as plt
 from Point import Point
 import imageio
 
-def saveAsGIF(tabu, points, path="img\\"):
+def saveAsGIF(tabu, points, option, _type):
     
-    
+    GIFpath = option + "\\img_" + str(len(points)) + "\\" + option + "_" + str(len(points)) + _type + ".gif"
+    IMGpath = option + "\\img_" + str(len(points)) + "\\"
     size_min = -5
     size_max = 80
     filenames = []
@@ -38,11 +39,11 @@ def saveAsGIF(tabu, points, path="img\\"):
         ax[1].set_title("Local best permutation")
         # ax[1].set_xlim([size_min, size_max])
         # ax[1].set_ylim([size_min, size_max])
-        fig.savefig(path + str(i) + ".png")
-        filenames.append(path + str(i) + ".png")
+        fig.savefig(IMGpath + str(i) + ".png")
+        filenames.append(IMGpath + str(i) + ".png")
         plt.close()
     
-    with imageio.get_writer(path + 'mygif.gif', mode='I') as writer:
+    with imageio.get_writer(GIFpath, mode='I') as writer:
         for filename in filenames:
             image = imageio.imread(filename)
             writer.append_data(image)
