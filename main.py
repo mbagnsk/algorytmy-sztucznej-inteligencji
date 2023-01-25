@@ -5,16 +5,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 dataReader = ReadData.ReadData()
-pointsNumber, points = dataReader.importData(path="test data//data_15.txt")
+pointsNumber, points = dataReader.importData(path="test data//data_30.txt")
 
 tsp = TSP.TSP(pointsNumber, points)
 adjacencyMatrix = tsp.getAdjacencyMatrix().copy()
 
 startIndex = 1
 lengthOfTabu = 7
-option = "insert"
-iterationNumber = 100
-cycleNumberMax = 10
+option = "flip"
+iterationNumber = 200
+cycleNumberMax = 5
 isReactiveTabu = True
 reactiveInterval = 50
 
@@ -26,29 +26,46 @@ print("First permutation: " + str(tabu.firstPermutation))
 print("Length of first permutation: " + str(tabu.calculateRouteDistance(tabu.firstPermutation)))
 print("-------------------")
 print("First permutation: " + str(tabu.bestPermutation))
-print("Length of first permutation: " + str(tabu.bestDistance))
+print("Length of best permutation: " + str(tabu.bestDistance))
 print("-------------------")
 
 
 np.savetxt("funkcja_celu_best.txt", tabu.bestPermutationHistory, comments = "", fmt = '%f')
 np.savetxt("funkcja_celu_local_best.txt", tabu.localBestpermutationHistory, comments = "", fmt = '%f')
-np.savetxt("hist.txt", tabu.permutationHistory, comments = "", fmt = '%i')
-i = 0
-for perm in tabu.permutationHistory:
-    x = []
-    y = []
-    for j in range(len(perm)):
-        x.append(points[perm[j]].x)
-        y.append(points[perm[j]].y)
-    plt.figure()
-    plt.plot(x, y)
-    plt.scatter(x, y, c='orange', marker='o')
-    plt.xlabel("X")
-    plt.ylabel("Y")
-    # plt.show()
-    plt.savefig("img\\" + str(i) + ".png")
+
+size_max = 80
+
+for i in range(len(tabu.permutationHistoryGlobal)):
+    perm_g = tabu.permutationHistoryGlobal[i]
+    perm_l = tabu.permutationHistoryLocal[i]
+    x_g = []
+    y_g = []
+    x_l = []
+    y_l = []
+    
+    for j in range(len(perm_g)):
+        x_g.append(points[perm_g[j]].x)
+        y_g.append(points[perm_g[j]].y)
+        x_l.append(points[perm_l[j]].x)
+        y_l.append(points[perm_l[j]].y)
+
+    fig, ax = plt.subplots(1, 2, figsize=(20,10))
+    ax[0].plot(x_g, y_g, zorder=1, linewidth=5)
+    ax[0].scatter(x_g, y_g, color='orange', zorder=2, s=120)
+    ax[0].set_xlabel("X")
+    ax[0].set_ylabel("Y")
+    ax[0].set_title("Global best permutation")
+    # ax[0].set_xlim([-5, size_max])
+    # ax[0].set_ylim([-5, size_max])
+    ax[1].plot(x_l, y_l, zorder=1, linewidth=5)
+    ax[1].scatter(x_g, y_g, color='orange', zorder=2, s=120)
+    ax[1].set_xlabel("X")
+    ax[1].set_ylabel("Y")
+    ax[1].set_title("Local best permutation")
+    # ax[1].set_xlim([-5, size_max])
+    # ax[1].set_ylim([-5, size_max])
+    fig.savefig("img_30\\" + str(i) + ".png")
     plt.close()
-    i += 1
 
 
 

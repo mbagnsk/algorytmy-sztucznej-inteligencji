@@ -12,13 +12,15 @@ class TabuSearch:
     startIndex = 0
     bestPermutationHistory = []
     localBestpermutationHistory = []
-    permutationHistory = []
+    permutationHistoryGlobal = []
+    permutationHistoryLocal = []
 
     def __init__(self, adjacencyMatrix, pointsNumber, startIndex):
         self.pointsNumber = pointsNumber
         self.adjacencyMatrix = adjacencyMatrix
         self.startIndex = startIndex
-        self.firstPermutation = self.generateRandomPermutation(self.setFirstPermutation(self.startIndex))
+        # self.firstPermutation = self.generateRandomPermutation(self.setFirstPermutation(self.startIndex))
+        self.firstPermutation = self.setFirstPermutation(self.startIndex)
 
     def execute(self, startPermutation, lenghtOfTabu, option, iterationNumber, cycleNumberMax, isReactiveTabu, reactiveInterval):
         isCycleNumberMaxReached = False
@@ -28,7 +30,7 @@ class TabuSearch:
         localBestPermutation = startPermutation
         tabuList = Queue_.Queue(lenghtOfTabu)
         tabuList.put(localBestPermutation)
-        for _ in range(iterationNumber):
+        for xx in range(iterationNumber):
             localBestDistance = sys.maxsize
             neighborhood = self.generateNeighborhood(permutation, option)
             for neighborPermutation in neighborhood:
@@ -46,7 +48,7 @@ class TabuSearch:
                         localBestDistance = distance
                         localBestPermutation = neighborPermutation
             bestPermutationChanged = False
-            print(localBestDistance)
+            print(str(xx) + ": " + str(localBestDistance))
             if localBestDistance < self.bestDistance:
                 self.bestDistance = localBestDistance
                 self.bestPermutation = localBestPermutation
@@ -74,20 +76,24 @@ class TabuSearch:
                         return self.bestPermutation
             self.bestPermutationHistory.append(self.bestDistance)
             self.localBestpermutationHistory.append(localBestDistance)
-            self.permutationHistory.append(self.bestPermutation)
+            self.permutationHistoryGlobal.append(self.bestPermutation)
+            self.permutationHistoryLocal.append(localBestPermutation)
 
         return self.bestPermutation
 
     def generateNeighborhood(self, permutation, option):
         dictionary = {
             1: "insert",
-            2: "swap"
+            2: "swap",
+            3: "flip"
         }
         option = option.lower()
         if option == dictionary[1]:
             neighborhood = self.generateNeighborhoodByInsert(permutation)
         if option == dictionary[2]:
             neighborhood = self.generateNeighborhoodBySwap(permutation)
+        if option == dictionary[3]:
+            neighborhood = self.generateNeighborhoodByFlip(permutation)
         return neighborhood
 
     def generateNeighborhoodByInsert(self, permutation):
@@ -116,7 +122,23 @@ class TabuSearch:
                     value = currentPermutation[i]
                     currentPermutation[i] = currentPermutation[j]
                     currentPermutation[j] = value
-
+                    ifFound = False
+                    for vector in neighborhood:
+                        if np.array_equal(vector, currentPermutation):
+                            ifFound = True
+                    if not ifFound:
+                        neighborhood.append(currentPermutation)
+        return neighborhood
+    
+    def generateNeighborhoodByFlip(self, permutation):
+        neighborhood = []
+        currentPermutation = np.copy(permutation)
+        for i in range(1, len(permutation) - 1):
+            for j in range(1, len(permutation) - 1):
+                if i != j:
+                    currentPermutation = np.copy(permutation)
+                    part = currentPermutation[i:j+1]
+                    currentPermutation[i:j+1] = np.flip(part)
                     ifFound = False
                     for vector in neighborhood:
                         if np.array_equal(vector, currentPermutation):
